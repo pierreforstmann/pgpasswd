@@ -73,9 +73,15 @@ int main(int argc, char **argv)
 {
 
 	char	conninfo[CONNECT_STRING_MAX_LENGTH];
+#if PG_VERSION_NUM < 90600
+	char	*old_password;
+	char	*new_password1;
+	char	*new_password2;
+#else
 	char	old_password[PASSWORD_MAX_LENGTH];
 	char	new_password1[PASSWORD_MAX_LENGTH];
 	char	new_password2[PASSWORD_MAX_LENGTH];
+#endif
 	PGconn 	*conn;
 	char	stmt[STMT_MAX_LENGTH];
 	PGresult	*res;
@@ -137,8 +143,11 @@ int main(int argc, char **argv)
 		}
 	}
 	
-
+#if PG_VERSION_NUM < 90600
+	old_password = simple_prompt("Password:", PASSWORD_MAX_LENGTH, false);	
+#else
 	simple_prompt("Password:", old_password, PASSWORD_MAX_LENGTH, false);	
+#endif
 	strcat(conninfo,"password=");
         strcat(conninfo, old_password);
         strcat(conninfo, " ");
@@ -157,8 +166,13 @@ int main(int argc, char **argv)
 	if (verbose == true)
 		print_serverlibversion(conn);
 
+#if PG_VERSION_NUM < 90600
+	new_password1 = simple_prompt("Password:", PASSWORD_MAX_LENGTH, false);	
+	new_password2 = simple_prompt("Password:", PASSWORD_MAX_LENGTH, false);	
+#else
 	simple_prompt("New password:", new_password1, PASSWORD_MAX_LENGTH, false);	
 	simple_prompt("New password:", new_password2, PASSWORD_MAX_LENGTH, false);	
+#endif
 	if (strcmp(new_password1, new_password2) != 0)
 	{
 		fprintf(stderr, "New passwords do not match.\n");
