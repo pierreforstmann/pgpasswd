@@ -6,7 +6,7 @@ Change PostgreSQL account password from Linux command line without entering any 
 ## usage
 
 Enter:
-* same parameters (host name, port name, user name and database name) as psql to connect to PostgreSQL 
+* same parameters (host name, port number, user name and database name) as psql to connect to PostgreSQL 
 * current password 
 * new password twice.
 
