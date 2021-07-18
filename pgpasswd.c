@@ -25,6 +25,7 @@
 /*
  * static functions
  */
+static void usage();
 static void print_clientlibversion();
 static void print_serverlibversion(PGconn *conn);
 static void print_conninfo(char *s);
@@ -60,9 +61,23 @@ static void exit_nicely(PGconn *conn, PGresult *res)
 
 	exit(1);
 }
+
 static void print_stmt(char *s)
 {
 	printf("stmt=%s \n", s);
+}
+
+static void usage(void)
+{
+	printf(("pgpasswd changes PostgreSQL account password.\n\n"));
+	printf(("Usage:\n"));
+	printf(("  pgpasswd [OPTION]...\n\n"));
+	printf(("Options:\n"));
+	printf(("  -h, --host       instance host name\n"));
+	printf(("  -p, --port       instance port number\n"));
+	printf(("  -d, --dbname     database name\n"));
+	printf(("  -U, --user       user name\n"));
+	printf(("\n"));
 }
 
 /*
@@ -108,6 +123,16 @@ int main(int argc, char **argv)
 
 	if (verbose == true)
 		print_clientlibversion();
+
+	if (argc > 1)
+	{
+		if (strcmp(argv[1], "--help") == 0 || strcmp(argv[1], "-?") == 0)
+		{
+			usage();
+			exit(0);
+		}
+	}
+
 
 	while (( c = getopt_long(argc, argv, "d:h:p:vU:", long_options, &optindex)) != -1)
 	{
@@ -167,8 +192,8 @@ int main(int argc, char **argv)
 		print_serverlibversion(conn);
 
 #if PG_VERSION_NUM < 90600
-	new_password1 = simple_prompt("Password:", PASSWORD_MAX_LENGTH, false);	
-	new_password2 = simple_prompt("Password:", PASSWORD_MAX_LENGTH, false);	
+	new_password1 = simple_prompt("New Password:", PASSWORD_MAX_LENGTH, false);	
+	new_password2 = simple_prompt("New Password:", PASSWORD_MAX_LENGTH, false);	
 #else
 	simple_prompt("New password:", new_password1, PASSWORD_MAX_LENGTH, false);	
 	simple_prompt("New password:", new_password2, PASSWORD_MAX_LENGTH, false);	
