@@ -88,7 +88,7 @@ int main(int argc, char **argv)
 {
 
 	char	conninfo[CONNECT_STRING_MAX_LENGTH];
-#if PG_VERSION_NUM < 90600
+#if PG_VERSION_NUM < 100000
 	char	*old_password;
 	char	*new_password1;
 	char	*new_password2;
@@ -168,7 +168,7 @@ int main(int argc, char **argv)
 		}
 	}
 	
-#if PG_VERSION_NUM < 90600
+#if PG_VERSION_NUM < 100000
 	old_password = simple_prompt("Password:", PASSWORD_MAX_LENGTH, false);	
 #else
 	simple_prompt("Password:", old_password, PASSWORD_MAX_LENGTH, false);	
@@ -191,9 +191,9 @@ int main(int argc, char **argv)
 	if (verbose == true)
 		print_serverlibversion(conn);
 
-#if PG_VERSION_NUM < 90600
-	new_password1 = simple_prompt("New Password:", PASSWORD_MAX_LENGTH, false);	
-	new_password2 = simple_prompt("New Password:", PASSWORD_MAX_LENGTH, false);	
+#if PG_VERSION_NUM < 100000
+	new_password1 = simple_prompt("New password:", PASSWORD_MAX_LENGTH, false);	
+	new_password2 = simple_prompt("New password:", PASSWORD_MAX_LENGTH, false);	
 #else
 	simple_prompt("New password:", new_password1, PASSWORD_MAX_LENGTH, false);	
 	simple_prompt("New password:", new_password2, PASSWORD_MAX_LENGTH, false);	
