@@ -101,6 +101,10 @@ int main(int argc, char **argv)
 	char	stmt[STMT_MAX_LENGTH];
 	PGresult	*res;
 	bool	verbose;
+	bool	host_is_set;
+	bool	port_is_set;
+	bool	user_is_set;
+	bool	database_is_set;
 
 	static struct option long_options[] = 
 	{
@@ -133,6 +137,10 @@ int main(int argc, char **argv)
 		}
 	}
 
+	host_is_set = false;
+	port_is_set = false;
+	user_is_set = false;
+	database_is_set = false;
 
 	while (( c = getopt_long(argc, argv, "d:h:p:vU:", long_options, &optindex)) != -1)
 	{
@@ -142,21 +150,25 @@ int main(int argc, char **argv)
 				strcat(conninfo,"dbname=");
 				strcat(conninfo, optarg);
 				strcat(conninfo, " ");
+				database_is_set = true;
 				break;
 			case 'h':
 				strcat(conninfo,"host=");
 				strcat(conninfo, optarg);
 				strcat(conninfo, " ");
+				host_is_set = true;
 				break;
 			case 'p':
 				strcat(conninfo,"port=");
 				strcat(conninfo, optarg);
 				strcat(conninfo, " ");
+				port_is_set = true;
 				break;
 			case 'U':
 				strcat(conninfo,"user=");
 				strcat(conninfo, optarg);
 				strcat(conninfo, " ");
+				user_is_set = true;
 				break;
 			case 'v':
 				verbose = true;
@@ -167,6 +179,14 @@ int main(int argc, char **argv)
 				break;
 		}
 	}
+
+	if (host_is_set == false || port_is_set == false || database_is_set == false || user_is_set == false)
+	{
+        	fprintf(stderr, "Missing parameters \n\n");
+		usage();
+        	exit_nicely(conn, res);
+	}
+
 	
 #if PG_VERSION_NUM < 100000
 	old_password = simple_prompt("Password:", PASSWORD_MAX_LENGTH, false);	

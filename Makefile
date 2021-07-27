@@ -19,6 +19,10 @@ all: pgpasswd
 pgpasswd: $(OBJS) 
 	$(CC) $(CFLAGS) $(OBJS) $(LDFLAGS) $(LDFLAGS_EX) $(LIBS) -o $@$(X)
 
+install:
+	$(INSTALL_PROGRAM) pgpasswd '$(DESTDIR)$(bindir)'
+
+
 clean distclean maintainer-clean:
 	rm -f pgpasswd *.o
 
