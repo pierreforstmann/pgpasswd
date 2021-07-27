@@ -14,8 +14,9 @@ This module must be built using the standard PGXS infrastructure. For this to wo
 git clone https://github.com/pierreforstmann/pgpasswd.git 
 cd pgpasswd
 make 
+make install
 ```
-Currently `make install` has no effect: `pgpasswd` executable stays in the source code directory.
+`pgpasswd` is installed in the current PostgreSQL bin directory defined by the PGXS infrastructure.
 
 ## Usage
 
