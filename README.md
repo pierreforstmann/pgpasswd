@@ -8,7 +8,11 @@ Change PostgreSQL account password from Linux command line without entering any 
 
 ### Compiling
 
-This module must be built using the standard PGXS infrastructure. For this to work, the `pg_config` program must be available in your $PATH:
+This module can be built using the standard PGXS infrastructure. 
+It can also be built using a standard PostgreSQL server installation that includes the corresponding PG development package to be able to compile libpq code:
+for example to compile with PG 15 on RHEL-like systems postgresql15-devel RPM must be installed.
+
+In both cases the `pg_config` program must be available in your $PATH:
 
 ```
 git clone https://github.com/pierreforstmann/pgpasswd.git 
@@ -26,7 +30,7 @@ pg_config --bindir
 `pgpasswd` for Postgresql can be compared to `passwd` on Linux and UNIX systems.
 
 Enter:
-* same parameters (host name, port number, user name and database name) as psql to connect to PostgreSQL 
+* same parameters (host name, port number, user name and database name) as `psql` to connect to PostgreSQL 
 * current password once
 * new password twice.
 
@@ -38,4 +42,14 @@ Password:
 New password:
 New password:
 Password changed.
+```
+
+Detailed PG client and PG server versions can be displayed with -v option after successfull connexion:
+```
+$ ./pgpasswd -h localhost -p 5432 -d postgres -U test -v
+Password:
+PG libpq version: 150006
+conninfo: host=localhost port=5432 dbname=postgres user=test password=test  
+PG server version: 160002
+New password:
 ```
