@@ -42,7 +42,7 @@ static void print_clientlibversion()
 {
 	int lib_ver = PQlibVersion();
 
-	printf("libpq version: %d\n", lib_ver);
+	printf("PG libpq version: %d\n", lib_ver);
 	
 }
 
@@ -50,7 +50,7 @@ static void print_serverlibversion(PGconn *conn)
 {
 	int ver = PQserverVersion(conn);
 
-	printf("Server version: %d\n", ver);
+	printf("PG server version: %d\n", ver);
 
 }
 static void print_conninfo(char *s)
@@ -169,9 +169,6 @@ int main(int argc, char **argv)
 	res = NULL;
 	conninfo[0]='\0';
 
-	if (verbose == true)
-		print_clientlibversion();
-
 	if (argc > 1)
 	{
 		if (strcmp(argv[1], "--help") == 0 || strcmp(argv[1], "-?") == 0)
@@ -237,6 +234,10 @@ int main(int argc, char **argv)
 	strcat(conninfo,"password=");
         strcat(conninfo, old_password);
         strcat(conninfo, " ");
+
+	if (verbose == true)
+		print_clientlibversion();
+
 
 	if (verbose == true)
 		print_conninfo(conninfo);
