@@ -18,9 +18,6 @@ pgpasswd: $(OBJ)
 $(OBJ) : $(SRC)
 	$(CC) $(INCLUDES) $(INCLUDES)/server -c $(SRC) -Wall
 
-install:
-	$(INSTALL_PROGRAM) pgpasswd '$(DESTDIR)$(bindir)'
-
 clean distclean maintainer-clean:
 	rm -f pgpasswd *.o
 
