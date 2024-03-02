@@ -16,6 +16,11 @@ cd pgpasswd
 make 
 ```
 
+`make install` installs `pgpasswd` to PostgreSQL binaries directory returned by:
+```
+pg_config --bindir
+```
+
 ## Usage
 
 `pgpasswd` for Postgresql can be compared to `passwd` on Linux and UNIX systems.
