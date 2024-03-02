@@ -1,27 +1,25 @@
+#
 # pgpasswd Makefile
-# from src/test/examples/Makefile and psql Makefile
+#
+IDIR=$(shell pg_config --includedir)
+INCLUDES=-I$(IDIR)
+LDIR=$(shell pg_config --libdir)
+LINKLIBS=-L$(LDIR)
+CC=gcc
 
-subdir = contrib/pgpasswd 
-top_builddir = ../..
-include $(top_builddir)/src/Makefile.global
-
-ifeq ($(PORTNAME), win32)
-LDFLAGS += -lws2_32
-endif
-
-override CPPFLAGS := -I. -I$(srcdir) -I$(libpq_srcdir) $(CPPFLAGS)
-LDFLAGS_INTERNAL += $(libpq_pgport)
-
-OBJS = pgpasswd.o
+EXE = pgpasswd
+OBJ = pgpasswd.o
+SRC = pgpasswd.c
 
 all: pgpasswd
 
-pgpasswd: $(OBJS) 
-	$(CC) $(CFLAGS) $(OBJS) $(LDFLAGS) $(LDFLAGS_EX) $(LIBS) -o $@$(X)
+pgpasswd: $(OBJ) 
+	$(CC) $(INCLUDES) $(LINKLIBS) -lpq -o $(EXE) $(OBJ)
+$(OBJ) : $(SRC)
+	$(CC) $(INCLUDES) $(INCLUDES)/server -c $(SRC) -Wall
 
 install:
 	$(INSTALL_PROGRAM) pgpasswd '$(DESTDIR)$(bindir)'
-
 
 clean distclean maintainer-clean:
 	rm -f pgpasswd *.o

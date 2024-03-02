@@ -3,7 +3,7 @@
  *	
  *	change PostgreSQL account password	
  *
- *	Copyright (c) 2021 Pierre Forstmann 
+ *	Copyright (c) 2021, 2022, 2023, 2024 Pierre Forstmann 
  *	        
  *
  */
@@ -13,10 +13,16 @@
 #include <stdlib.h>
 #include <string.h>
 #include <ctype.h>
-#include "postgres.h"
-#include "port.h"
-#include "getopt_long.h"
+#include <stdint.h>
+#include <unistd.h>
+#include <sys/types.h>
+#include <stdbool.h>
+#include <getopt.h>
+#include <termios.h>
 #include "libpq-fe.h"
+
+#define no_argument			0
+#define required_argument	1
 
 #define CONNECT_STRING_MAX_LENGTH	100
 #define PASSWORD_MAX_LENGTH		30	
@@ -49,7 +55,7 @@ static void print_serverlibversion(PGconn *conn)
 }
 static void print_conninfo(char *s)
 {
-	printf("conninfo=%s \n", s);
+	printf("conninfo: %s \n", s);
 }
 
 static void exit_nicely(PGconn *conn, PGresult *res) 
@@ -77,8 +83,52 @@ static void usage(void)
 	printf(("  -p, --port       instance port number\n"));
 	printf(("  -d, --dbname     database name\n"));
 	printf(("  -U, --user       user name\n"));
+	printf(("  -v, --verbose    verbose mode\n"));
 	printf(("\n"));
 }
+
+/*
+ *
+ * read_password 
+ * 
+ */
+static void read_password(char password[])
+{
+    static struct termios oldt, newt;
+    int i = 0;
+    int c;
+
+    /*
+     * saving the old settings of STDIN_FILENO and copy settings for resetting
+     */
+    tcgetattr( STDIN_FILENO, &oldt);
+    newt = oldt;
+
+    /*
+     * setting the approriate bit in the termios struct
+     */
+    newt.c_lflag &= ~(ECHO);          
+
+    /*
+     * setting the new bits
+     */
+    tcsetattr( STDIN_FILENO, TCSANOW, &newt);
+
+    /*
+     * reading the password from the console
+     */
+    while ((c = getchar())!= '\n' && c != EOF && i < PASSWORD_MAX_LENGTH){
+        password[i++] = c;
+    }
+    password[i] = '\0';
+
+    /*
+     * resetting our old STDIN_FILENO
+     */ 
+    tcsetattr( STDIN_FILENO, TCSANOW, &oldt);
+
+}
+
 
 /*
  * main
@@ -88,15 +138,9 @@ int main(int argc, char **argv)
 {
 
 	char	conninfo[CONNECT_STRING_MAX_LENGTH];
-#if PG_VERSION_NUM < 100000
-	char	*old_password;
-	char	*new_password1;
-	char	*new_password2;
-#else
 	char	old_password[PASSWORD_MAX_LENGTH];
 	char	new_password1[PASSWORD_MAX_LENGTH];
 	char	new_password2[PASSWORD_MAX_LENGTH];
-#endif
 	PGconn 	*conn;
 	char	stmt[STMT_MAX_LENGTH];
 	PGresult	*res;
@@ -187,12 +231,9 @@ int main(int argc, char **argv)
         	exit_nicely(conn, res);
 	}
 
-	
-#if PG_VERSION_NUM < 100000
-	old_password = simple_prompt("Password:", PASSWORD_MAX_LENGTH, false);	
-#else
-	simple_prompt("Password:", old_password, PASSWORD_MAX_LENGTH, false);	
-#endif
+	printf("Password:");
+	read_password(old_password);
+	printf("\n");
 	strcat(conninfo,"password=");
         strcat(conninfo, old_password);
         strcat(conninfo, " ");
@@ -211,13 +252,12 @@ int main(int argc, char **argv)
 	if (verbose == true)
 		print_serverlibversion(conn);
 
-#if PG_VERSION_NUM < 100000
-	new_password1 = simple_prompt("New password:", PASSWORD_MAX_LENGTH, false);	
-	new_password2 = simple_prompt("New password:", PASSWORD_MAX_LENGTH, false);	
-#else
-	simple_prompt("New password:", new_password1, PASSWORD_MAX_LENGTH, false);	
-	simple_prompt("New password:", new_password2, PASSWORD_MAX_LENGTH, false);	
-#endif
+	printf("New password:");
+	read_password(new_password1);
+	printf("\n");
+	printf("New Password:");
+	read_password(new_password2);
+	printf("\n");
 	if (strcmp(new_password1, new_password2) != 0)
 	{
 		fprintf(stderr, "New passwords do not match.\n");
