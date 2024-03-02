@@ -25,4 +25,4 @@ clean distclean maintainer-clean:
 	rm -f pgpasswd *.o
 
 pgxn:
-	git archive --format zip  --output ../pgxn/pgpasswd/pgpasswd-0.0.1.zip master
+	git archive --format zip  --output ../pgxn/pgpasswd/pgpasswd-0.0.1.zip main
