@@ -40,7 +40,7 @@ Example:
 pgpasswd -h localhost -p 5432 -U test -d postgres
 Password:
 New password:
-New password:
+Confirm new password:
 Password changed.
 ```
 
