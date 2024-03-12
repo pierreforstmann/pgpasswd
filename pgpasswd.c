@@ -256,7 +256,7 @@ int main(int argc, char **argv)
 	printf("New password:");
 	read_password(new_password1);
 	printf("\n");
-	printf("New Password:");
+	printf("Confirm new password:");
 	read_password(new_password2);
 	printf("\n");
 	if (strcmp(new_password1, new_password2) != 0)
