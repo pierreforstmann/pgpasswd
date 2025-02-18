@@ -149,6 +149,9 @@ int main(int argc, char **argv)
 	bool	port_is_set;
 	bool	user_is_set;
 	bool	database_is_set;
+	char	algo[] = "scram-sha-256";
+	char	*encrypted_old_password;
+	char	*encrypted_new_password;
 
 	static struct option long_options[] = 
 	{
@@ -235,8 +238,9 @@ int main(int argc, char **argv)
         strcat(conninfo, old_password);
         strcat(conninfo, " ");
 
-	if (verbose == true)
+	if (verbose == true) {
 		print_clientlibversion();
+	}
 
 
 	if (verbose == true)
@@ -265,6 +269,16 @@ int main(int argc, char **argv)
 		exit_nicely(conn, res);
 	}
 
+	/*
+	encrypted_new_password = PQencryptPasswordConn(conn, new_password2, 
+			                           PQuser(conn), algo);
+						  */
+	/*
+	 * relies on password_encryption from server
+	 */
+	res = PQchangePassword(conn, PQuser(conn), new_password2);
+
+	/*
 	strcpy(stmt, "ALTER USER ");
 	strcat(stmt, PQuser(conn)); 
 	strcat(stmt, " PASSWORD '");
@@ -273,6 +287,7 @@ int main(int argc, char **argv)
 	if (verbose == true)
 		print_stmt(stmt);
 	res = PQexec(conn, stmt);
+	*/
     
     	if (PQresultStatus(res) != PGRES_COMMAND_OK) {
 		fprintf(stderr, "Password change failed: %s \n", PQerrorMessage(conn));
