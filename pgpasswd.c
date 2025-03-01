@@ -36,7 +36,6 @@ static void print_clientlibversion();
 static void print_serverlibversion(PGconn *conn);
 static void print_conninfo(char *s);
 static void exit_nicely(PGconn *conn, PGresult *res);
-static void print_stmt(char *s);
 
 static void print_clientlibversion()
 {
@@ -66,11 +65,6 @@ static void exit_nicely(PGconn *conn, PGresult *res)
 		PQfinish(conn);
 
 	exit(1);
-}
-
-static void print_stmt(char *s)
-{
-	printf("stmt=%s \n", s);
 }
 
 static void usage(void)
@@ -142,16 +136,12 @@ int main(int argc, char **argv)
 	char	new_password1[PASSWORD_MAX_LENGTH];
 	char	new_password2[PASSWORD_MAX_LENGTH];
 	PGconn 	*conn;
-	char	stmt[STMT_MAX_LENGTH];
 	PGresult	*res;
 	bool	verbose;
 	bool	host_is_set;
 	bool	port_is_set;
 	bool	user_is_set;
 	bool	database_is_set;
-	char	algo[] = "scram-sha-256";
-	char	*encrypted_old_password;
-	char	*encrypted_new_password;
 
 	static struct option long_options[] = 
 	{
