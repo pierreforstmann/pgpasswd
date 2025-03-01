@@ -1,7 +1,7 @@
 # pgpasswd
 Change PostgreSQL account password from Linux command line without entering any SQL statement and sending the **encrypted** password to server.<br>
 
-`pgpasswd`  has been successfully tested with PostgreSQL 15, 16 and 17 on Linux. <br>
+`pgpasswd`  has been successfully tested with PostgreSQL 13, 14, 15, 16 and 17 on Linux with `password_encryption` set to `scram-sha-256` or to `md5`. <br>
 ## Installation
 
 `pgpasswd` is a PostgreSQL extension and a standalone executable (no need to install anything in the database, no `CREATE EXTENSION` to run).
