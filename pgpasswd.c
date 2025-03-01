@@ -22,11 +22,11 @@
 #include "libpq-fe.h"
 
 #define no_argument			0
-#define required_argument	1
+#define required_argument		1
 
-#define CONNECT_STRING_MAX_LENGTH	100
-#define PASSWORD_MAX_LENGTH		30	
-#define STMT_MAX_LENGTH			60
+#define CONNECT_STRING_MAX_LENGTH	128
+#define PASSWORD_MAX_LENGTH		64	
+#define STMT_MAX_LENGTH			512	
 
 /*
  * static functions
@@ -142,6 +142,8 @@ int main(int argc, char **argv)
 	bool	port_is_set;
 	bool	user_is_set;
 	bool	database_is_set;
+	char	stmt[STMT_MAX_LENGTH];
+	char	*encrypted_new_password;
 
 	static struct option long_options[] = 
 	{
@@ -259,25 +261,26 @@ int main(int argc, char **argv)
 		exit_nicely(conn, res);
 	}
 
-	/*
-	encrypted_new_password = PQencryptPasswordConn(conn, new_password2, 
-			                           PQuser(conn), algo);
-						  */
+#if PG_VERSION_NUM >= 17000 
 	/*
 	 * relies on password_encryption from server
 	 */
 	res = PQchangePassword(conn, PQuser(conn), new_password2);
-
-	/*
+#else
+	encrypted_new_password = PQencryptPasswordConn(conn, new_password2, 
+			                           PQuser(conn), NULL);
 	strcpy(stmt, "ALTER USER ");
 	strcat(stmt, PQuser(conn)); 
 	strcat(stmt, " PASSWORD '");
-	strcat(stmt, new_password2); 
+	strcat(stmt, encrypted_new_password); 
 	strcat(stmt, "'");
+	/* 
 	if (verbose == true)
 		print_stmt(stmt);
-	res = PQexec(conn, stmt);
 	*/
+	res = PQexec(conn, stmt);
+#endif
+
     
     	if (PQresultStatus(res) != PGRES_COMMAND_OK) {
 		fprintf(stderr, "Password change failed: %s \n", PQerrorMessage(conn));
