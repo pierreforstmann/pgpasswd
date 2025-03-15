@@ -1,10 +1,10 @@
 # pgpasswd
-Change PostgreSQL account password from Linux command line without entering any SQL statement and sending the **encrypted** password to server.<br>
+Change or reset PostgreSQL account password from Linux command line without entering any SQL statement and sending the **encrypted** password to server.<br>
 
-`chpasswd`  has been successfully tested with PostgreSQL 13, 14, 15, 16 and 17 on Linux with `password_encryption` set to `scram-sha-256` or to `md5`. <br>
+`chpasswd` and `resetpasswd`  have been successfully tested with PostgreSQL 13, 14, 15, 16 and 17 on Linux with `password_encryption` set to `scram-sha-256` or to `md5`. <br>
 ## Installation
 
-`pgpasswd` is a PostgreSQL extension :  `chpasswd` is a standalone executable (no need to install anything in the database, no `CREATE EXTENSION` to run).
+`pgpasswd` is a PostgreSQL extension :  `chpasswd` and `resetpasswd` are standalone executables (no need to install anything in the database, no `CREATE EXTENSION` to run).
 
 ### Compiling
 
@@ -20,14 +20,14 @@ cd pgpasswd
 make 
 ```
 
-`make install` installs `chpasswd` to PostgreSQL binaries directory returned by:
+`make install` installs `chpasswd` and `resetpasswd` to PostgreSQL binaries directory returned by:
 ```
 pg_config --bindir
 ```
 
 ## Usage
 
-`chpasswd` for Postgresql can be compared to `passwd` on Linux and UNIX systems.
+`chpasswd` for PostgreSQL can be compared to `passwd` on Linux and UNIX systems when used to change current user password.
 
 Enter:
 * same parameters (host name, port number, user name and database name) as `psql` to connect to PostgreSQL 
@@ -52,4 +52,20 @@ PG libpq version: 170004
 conninfo: host=localhost port=5432 dbname=postgres user=test password=test  
 PG server version: 170004
 New password:
+Password changed.
+```
+
+`resetpasswd` for PostgreSQL can be compared to `passwd` on Linux and UNIX systems when used to change another user passord:
+user account used to connect to PostgreSQL must have superuser privilege. After successfull connection, `resetpasswd' prompts
+for user account for which password must be changed: only new password for this user account must be entered.
+
+Example:
+
+``` 
+resetpasswd -h localhost -p 5432 -U admin -d postgres
+Password:
+Account:test
+New password:
+Confirm new password:
+Password successfully reset.
 ```
