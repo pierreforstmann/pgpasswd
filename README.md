@@ -31,8 +31,8 @@ pg_config --bindir
 
 Enter:
 * same parameters (host name, port number, user account and database name) as `psql` to connect to PostgreSQL 
-* current password once
-* new password twice.
+* current user password once
+* current user new password twice.
 
 Example:
 
@@ -55,12 +55,12 @@ New password:
 Password changed.
 ```
 
-`resetpasswd` for PostgreSQL can be compared to `passwd` on Linux and UNIX systems when used to change another user passord:
+`resetpasswd` for PostgreSQL can be compared to `passwd` on Linux and UNIX systems when used to change another user password:
 
 Enter:
 * same parameters (host name, port number, superuser account and database name) as `psql` to connect to PostgreSQL
-* user account for which password must be reset 
-* new password twice.
+* other user account for which password must be reset 
+* other user account new password twice.
 
 Example:
 
