@@ -1,10 +1,10 @@
 # pgpasswd
 Change PostgreSQL account password from Linux command line without entering any SQL statement and sending the **encrypted** password to server.<br>
 
-`pgpasswd`  has been successfully tested with PostgreSQL 13, 14, 15, 16 and 17 on Linux with `password_encryption` set to `scram-sha-256` or to `md5`. <br>
+`chpasswd`  has been successfully tested with PostgreSQL 13, 14, 15, 16 and 17 on Linux with `password_encryption` set to `scram-sha-256` or to `md5`. <br>
 ## Installation
 
-`pgpasswd` is a PostgreSQL extension and a standalone executable (no need to install anything in the database, no `CREATE EXTENSION` to run).
+`pgpasswd` is a PostgreSQL extension :  `chpasswd` is a standalone executable (no need to install anything in the database, no `CREATE EXTENSION` to run).
 
 ### Compiling
 
@@ -20,14 +20,14 @@ cd pgpasswd
 make 
 ```
 
-`make install` installs `pgpasswd` to PostgreSQL binaries directory returned by:
+`make install` installs `chpasswd` to PostgreSQL binaries directory returned by:
 ```
 pg_config --bindir
 ```
 
 ## Usage
 
-`pgpasswd` for Postgresql can be compared to `passwd` on Linux and UNIX systems.
+`chpasswd` for Postgresql can be compared to `passwd` on Linux and UNIX systems.
 
 Enter:
 * same parameters (host name, port number, user name and database name) as `psql` to connect to PostgreSQL 
@@ -37,7 +37,7 @@ Enter:
 Example:
 
 ``` 
-pgpasswd -h localhost -p 5432 -U test -d postgres
+chpasswd -h localhost -p 5432 -U test -d postgres
 Password:
 New password:
 Confirm new password:
@@ -46,7 +46,7 @@ Password changed.
 
 Detailed PG client and PG server versions can be displayed with -v option after successfull connexion:
 ```
-$ ./pgpasswd -h localhost -p 5432 -d postgres -U test -v
+$ ./chpasswd -h localhost -p 5432 -d postgres -U test -v
 Password:
 PG libpq version: 170004
 conninfo: host=localhost port=5432 dbname=postgres user=test password=test  

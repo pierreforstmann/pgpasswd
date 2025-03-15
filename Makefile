@@ -8,11 +8,11 @@ LINKLIBS=-L$(LDIR)
 CC=gcc
 EDIR=$(shell pg_config --bindir)
 
-EXE = pgpasswd
-OBJ = pgpasswd.o
-SRC = pgpasswd.c
+EXE = chpasswd
+OBJ = chpasswd.o
+SRC = chpasswd.c
 
-all: pgpasswd
+all: chpasswd
 
 $(EXE): $(OBJ) 
 	$(CC) $(INCLUDES) -static -o $(EXE) $(OBJ) $(LINKLIBS) -lpq -lpgcommon -lpgport -lpthread -lpgcommon_shlib -L/usr/lib64 -lc -lm  -Wall
@@ -22,7 +22,7 @@ $(OBJ) : $(SRC)
 install:
 	install	$(EXE) $(EDIR)
 clean distclean maintainer-clean:
-	rm -f pgpasswd *.o
+	rm -f chpasswd *.o
 
 pgxn:
-	git archive --format zip  --output ../pgxn/pgpasswd/pgpasswd-0.0.1.zip main
+	git archive --format zip  --output ../pgxn/pgpasswd/chpasswd-0.0.1.zip main
