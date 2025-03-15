@@ -8,21 +8,31 @@ LINKLIBS=-L$(LDIR)
 CC=gcc
 EDIR=$(shell pg_config --bindir)
 
-EXE = chpasswd
-OBJ = chpasswd.o
-SRC = chpasswd.c
+EXE1 = chpasswd 
+OBJ1 = chpasswd.o
+SRC1 = chpasswd.c
 
-all: chpasswd
+EXE2 = resetpasswd 
+OBJ2 = resetpasswd.o
+SRC2 = resetpasswd.c
 
-$(EXE): $(OBJ) 
-	$(CC) $(INCLUDES) -static -o $(EXE) $(OBJ) $(LINKLIBS) -lpq -lpgcommon -lpgport -lpthread -lpgcommon_shlib -L/usr/lib64 -lc -lm  -Wall
-$(OBJ) : $(SRC)
-	$(CC) $(INCLUDES) $(INCLUDES)/server -c $(SRC) -Wall
+all: chpasswd resetpasswd
+
+$(EXE1): $(OBJ1) 
+	$(CC) $(INCLUDES) -static -o $(EXE1) $(OBJ1) $(LINKLIBS) -lpq -lpgcommon -lpgport -lpthread -lpgcommon_shlib -L/usr/lib64 -lc -lm  -Wall
+$(OBJ1) : $(SRC1)
+	$(CC) $(INCLUDES) $(INCLUDES)/server -c $(SRC1) -Wall
+
+$(EXE2): $(OBJ2) 
+	$(CC) $(INCLUDES) -static -o $(EXE2) $(OBJ2) $(LINKLIBS) -lpq -lpgcommon -lpgport -lpthread -lpgcommon_shlib -L/usr/lib64 -lc -lm  -Wall
+$(OBJ2) : $(SRC2)
+	$(CC) $(INCLUDES) $(INCLUDES)/server -c $(SRC2) -Wall
 
 install:
-	install	$(EXE) $(EDIR)
+	install	$(EXE1) $(EDIR)
+	install	$(EXE2) $(EDIR)
 clean distclean maintainer-clean:
-	rm -f chpasswd *.o
+	rm -f *passwd *.o
 
 pgxn:
-	git archive --format zip  --output ../pgxn/pgpasswd/chpasswd-0.0.1.zip main
+	git archive --format zip  --output ../pgxn/pgpasswd/pgpasswd-0.0.1.zip main

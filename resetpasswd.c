@@ -1,9 +1,9 @@
 /*
- *	chpasswd.c
+ *	resetpasswd.c
  *	
  *	change PostgreSQL account password	
  *
- *	Copyright (c) 2021, 2022, 2023, 2024 Pierre Forstmann 
+ *	Copyright (c) 2025 Pierre Forstmann 
  *	        
  *
  */
@@ -25,6 +25,7 @@
 #define required_argument		1
 
 #define CONNECT_STRING_MAX_LENGTH	128
+#define ACCOUNT_MAX_LENGTH		30	
 #define PASSWORD_MAX_LENGTH		64	
 #define STMT_MAX_LENGTH			512	
 
@@ -69,14 +70,14 @@ static void exit_nicely(PGconn *conn, PGresult *res)
 
 static void usage(void)
 {
-	printf(("chpasswd changes PostgreSQL account password.\n\n"));
+	printf(("resetpasswd changes PostgreSQL passwd for another user account.\n\n"));
 	printf(("Usage:\n"));
-	printf(("  chpasswd [OPTION]...\n\n"));
+	printf(("  resetpasswd [OPTION]...\n\n"));
 	printf(("Options:\n"));
 	printf(("  -h, --host       instance host name\n"));
 	printf(("  -p, --port       instance port number\n"));
 	printf(("  -d, --dbname     database name\n"));
-	printf(("  -U, --user       user name\n"));
+	printf(("  -U, --user       user name (must have superuser privilege) \n"));
 	printf(("  -v, --verbose    verbose mode\n"));
 	printf(("\n"));
 }
@@ -132,7 +133,8 @@ int main(int argc, char **argv)
 {
 
 	char	conninfo[CONNECT_STRING_MAX_LENGTH];
-	char	old_password[PASSWORD_MAX_LENGTH];
+	char	super_password[PASSWORD_MAX_LENGTH];
+	char	account[ACCOUNT_MAX_LENGTH];
 	char	new_password1[PASSWORD_MAX_LENGTH];
 	char	new_password2[PASSWORD_MAX_LENGTH];
 	PGconn 	*conn;
@@ -224,10 +226,10 @@ int main(int argc, char **argv)
 	}
 
 	printf("Password:");
-	read_password(old_password);
+	read_password(super_password);
 	printf("\n");
 	strcat(conninfo,"password=");
-        strcat(conninfo, old_password);
+        strcat(conninfo,  super_password);
         strcat(conninfo, " ");
 
 	if (verbose == true) {
@@ -249,6 +251,8 @@ int main(int argc, char **argv)
 	if (verbose == true)
 		print_serverlibversion(conn);
 
+	printf("Account:");
+	fgets(account, ACCOUNT_MAX_LENGTH, stdin);
 	printf("New password:");
 	read_password(new_password1);
 	printf("\n");
@@ -268,9 +272,9 @@ int main(int argc, char **argv)
 	res = PQchangePassword(conn, PQuser(conn), new_password2);
 #else
 	encrypted_new_password = PQencryptPasswordConn(conn, new_password2, 
-			                           PQuser(conn), NULL);
+			                           account, NULL);
 	strcpy(stmt, "ALTER USER ");
-	strcat(stmt, PQuser(conn)); 
+	strcat(stmt, account); 
 	strcat(stmt, " PASSWORD '");
 	strcat(stmt, encrypted_new_password); 
 	strcat(stmt, "'");
@@ -283,11 +287,11 @@ int main(int argc, char **argv)
 
     
     	if (PQresultStatus(res) != PGRES_COMMAND_OK) {
-		fprintf(stderr, "Password change failed: %s \n", PQerrorMessage(conn));
+		fprintf(stderr, "Password reset failed: %s \n", PQerrorMessage(conn));
         	exit_nicely(conn, res);
     	}
 	
-	printf("Password changed.\n");
+	printf("Password successfully reset.\n");
 
 	PQfinish(conn);
 
