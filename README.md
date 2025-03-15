@@ -30,7 +30,7 @@ pg_config --bindir
 `chpasswd` for PostgreSQL can be compared to `passwd` on Linux and UNIX systems when used to change current user password.
 
 Enter:
-* same parameters (host name, port number, user name and database name) as `psql` to connect to PostgreSQL 
+* same parameters (host name, port number, user account and database name) as `psql` to connect to PostgreSQL 
 * current password once
 * new password twice.
 
@@ -56,8 +56,11 @@ Password changed.
 ```
 
 `resetpasswd` for PostgreSQL can be compared to `passwd` on Linux and UNIX systems when used to change another user passord:
-user account used to connect to PostgreSQL must have superuser privilege. After successfull connection, `resetpasswd' prompts
-for user account for which password must be changed: only new password for this user account must be entered.
+
+Enter:
+* same parameters (host name, port number, superuser account and database name) as `psql` to connect to PostgreSQL
+* user account for which password must be reset 
+* new password twice.
 
 Example:
 
