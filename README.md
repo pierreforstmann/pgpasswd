@@ -1,7 +1,9 @@
 # pgpasswd
 Change or reset PostgreSQL account password from Linux command line without entering any SQL statement and sending the **encrypted** password to server.<br>
 
-`chpasswd` and `resetpasswd`  have been successfully tested with PostgreSQL 13, 14, 15, 16 and 17 on Linux with `password_encryption` set to `scram-sha-256` or to `md5`. <br>
+`chpasswd` and `resetpasswd`  have been successfully tested with PostgreSQL 13, 14, 15, 16, 17 and 18 on Debian 12 and openSSL 3.0.7 with `password_encryption` set to `scram-sha-256` or to `md5`. <br>
+However compilation fails on Alma Linux 8.10 as of PostgreSQL 15.15, 16.11, 17.7 and 18.0 likely due to some incompatibilities with openSSL 1.1.1 and recent PostgreSQL versions.
+
 ## Installation
 
 `pgpasswd` is a PostgreSQL extension :  `chpasswd` and `resetpasswd` are standalone executables (no need to install anything in the database, no `CREATE EXTENSION` to run).
