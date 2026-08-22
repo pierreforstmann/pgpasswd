@@ -3,7 +3,7 @@
  *	
  *	change PostgreSQL account password	
  *
- *	Copyright (c) 2025 Pierre Forstmann 
+ *	Copyright (c) 2026 Pierre Forstmann 
  *	        
  *
  */
@@ -278,10 +278,13 @@ int main(int argc, char **argv)
 	strcat(stmt, " PASSWORD '");
 	strcat(stmt, encrypted_new_password); 
 	strcat(stmt, "'");
-	/* 
+
 	if (verbose == true)
-		print_stmt(stmt);
-	*/
+        {
+		printf(stmt);
+                printf("\n");
+        }
+
 	res = PQexec(conn, stmt);
 #endif
 

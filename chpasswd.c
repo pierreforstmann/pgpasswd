@@ -314,7 +314,11 @@ int main(int argc, char **argv)
 	strcat(stmt, "'");
 
 	if (verbose == true)
-		printf(stmt);
+        {
+            printf(stmt);
+            printf("\n");
+        }
+        
 
 	res = PQexec(conn, stmt);
 #endif
