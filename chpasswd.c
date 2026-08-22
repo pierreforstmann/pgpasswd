@@ -57,6 +57,42 @@ static void print_conninfo(char *s)
 	printf("conninfo: %s \n", s);
 }
 
+static void print_conn(PGconn *conn)
+{
+    char *status = "";
+
+    printf("pguser:%s\n", PQuser(conn));
+    switch(PQstatus(conn))
+    {
+        case CONNECTION_OK:
+                status = "CONNECTION_OK";
+                break;
+        case CONNECTION_BAD:
+                status = "CONNECTION_BAD";
+                break;
+        case CONNECTION_STARTED:
+                status = "CONNECTION_STARTED";
+                break;
+        case CONNECTION_MADE:
+                status = "CONNECTION_AWAITING_RESPONSE";
+                break;
+        case CONNECTION_AWAITING_RESPONSE:
+                status = "CONNECTION_AWAITING_RESPONSE";
+                break;
+        case CONNECTION_AUTH_OK:
+                status = "CONNECTION_AUTH_OK";
+                break;
+        case CONNECTION_AUTHENTICATING:
+                status = "CONNECTION_AUTHENTICATING";
+                break;
+        default:
+                status = "...";
+                break;
+                
+    }
+    printf("status:%s\n", status);
+}
+
 static void exit_nicely(PGconn *conn, PGresult *res) 
 {
 	if (res != NULL)
@@ -239,6 +275,8 @@ int main(int argc, char **argv)
 		print_conninfo(conninfo);
 
 	conn = PQconnectdb(conninfo);
+	if (verbose == true)
+		print_conn(conn);
 
 	if (PQstatus(conn) == CONNECTION_BAD) 
 	{ 
@@ -274,10 +312,10 @@ int main(int argc, char **argv)
 	strcat(stmt, " PASSWORD '");
 	strcat(stmt, encrypted_new_password); 
 	strcat(stmt, "'");
-	/* 
+
 	if (verbose == true)
-		print_stmt(stmt);
-	*/
+		printf(stmt);
+
 	res = PQexec(conn, stmt);
 #endif
 

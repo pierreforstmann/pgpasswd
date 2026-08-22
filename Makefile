@@ -19,12 +19,12 @@ SRC2 = resetpasswd.c
 all: chpasswd resetpasswd
 
 $(EXE1): $(OBJ1) 
-	$(CC) $(INCLUDES) -static -o $(EXE1) $(OBJ1) $(LINKLIBS) -lpq -lpgcommon -lpgport -lpthread -lpgcommon_shlib -L/usr/lib64 -lc -lm  -Wall
+	$(CC) $(INCLUDES) -o $(EXE1) $(OBJ1) $(LINKLIBS) -lpq -Wall
 $(OBJ1) : $(SRC1)
 	$(CC) $(INCLUDES) $(INCLUDES)/server -c $(SRC1) -Wall
 
 $(EXE2): $(OBJ2) 
-	$(CC) $(INCLUDES) -static -o $(EXE2) $(OBJ2) $(LINKLIBS) -lpq -lpgcommon -lpgport -lpthread -lpgcommon_shlib -L/usr/lib64 -lc -lm  -Wall
+	$(CC) $(INCLUDES) -o $(EXE2) $(OBJ2) $(LINKLIBS) -lpq -Wall
 $(OBJ2) : $(SRC2)
 	$(CC) $(INCLUDES) $(INCLUDES)/server -c $(SRC2) -Wall
 

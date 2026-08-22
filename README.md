@@ -6,7 +6,7 @@ However compilation fails on Alma Linux 8.10 as of PostgreSQL 15.15, 16.11, 17.7
 
 ## Installation
 
-`pgpasswd` is a PostgreSQL extension :  `chpasswd` and `resetpasswd` are standalone executables (no need to install anything in the database, no `CREATE EXTENSION` to run).
+`pgpasswd` provides new PostgreSQL clients:  `chpasswd` and `resetpasswd` are standalone executables (no need to install anything in the database, no `CREATE EXTENSION` to run).
 
 ### Compiling
 
