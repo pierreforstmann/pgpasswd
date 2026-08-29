@@ -26,7 +26,7 @@ make
 pg_config --bindir
 ```
 
-You need to set LD_LIBRARY_PATH for ``` libpq```:
+You need to set `LD_LIBRARY_PATH` for `libpq`:
 ```export LD_LIBRARY_PATH=<lib directory of PosgreSQL binaries>:$LD_LIBRARY_PATH```
 
 ## Usage
