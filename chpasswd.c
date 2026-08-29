@@ -82,9 +82,11 @@ static void print_conn(PGconn *conn)
         case CONNECTION_AUTH_OK:
                 status = "CONNECTION_AUTH_OK";
                 break;
+#if PG_VERSION_NUM >= 180000
         case CONNECTION_AUTHENTICATING:
                 status = "CONNECTION_AUTHENTICATING";
                 break;
+#endif
         default:
                 status = "...";
                 break;
