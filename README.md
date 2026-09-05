@@ -10,8 +10,8 @@ Change or reset PostgreSQL account password from Linux command line without ente
 ### Compiling
 
 This module can be built using a standard PostgreSQL server installation that includes the corresponding PG development package to be able to compile PostgreSQL client library code.
-`pg_config` program must be available in $PATH for user running make.
-User running make needs also sudo privilege in order to be able to install executables in PostgreSQL target directory (output of ```pg_config --bindir ```).
+- `pg_config` program must be available in $PATH for user running make.
+- user running make needs also sudo privilege in order to be able to install executables in PostgreSQL target directory (output of ```pg_config --bindir ```).
 
 ### Example on RHEL 9.8
 ```
