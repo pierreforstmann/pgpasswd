@@ -29,8 +29,8 @@ $(OBJ2) : $(SRC2)
 	$(CC) $(INCLUDES) $(INCLUDES)/server -c $(SRC2) -Wall
 
 install:
-	install	$(EXE1) $(EDIR)
-	install	$(EXE2) $(EDIR)
+	sudo install $(EXE1) $(EDIR)
+	sudo install $(EXE2) $(EDIR)
 clean distclean maintainer-clean:
 	rm -f *passwd *.o
 
