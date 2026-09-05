@@ -9,26 +9,23 @@ Change or reset PostgreSQL account password from Linux command line without ente
 
 ### Compiling
 
-This module can be built using the standard PGXS infrastructure. 
-It can also be built using a standard PostgreSQL server installation that includes the corresponding PG development package to be able to compile libpq code:
-for example to compile with PG 17 on RHEL-like systems `postgresql17-devel` RPM must be installed.
+This module can be built using a standard PostgreSQL server installation that includes the corresponding PG development package to be able to compile libpq code.
+`pg_config` program must be available in $PATH for user running make.
+User running make needs also sudo privilege in order to be able to install executables in PostgreSQL target directory (output of ```pg_config --bindir ```).
 
-In both cases the `pg_config` program must be available in your $PATH.
-
+### Example on RHEL 9.8
 ```
-git clone https://github.com/pierreforstmann/pgpasswd.git 
+sudo dnf -y install postgresql17-devel
+export PATH=/usr/pgsql-17/bin:$PATH
+git clone https://github.com/pierreforstmann/pgpasswd.git
 cd pgpasswd
-make 
+make clean
+make
 ```
-## Installing 
-`make install` installs `chpasswd` and `resetpasswd` to PostgreSQL binaries directory returned by:
+### Installing
 ```
-pg_config --bindir
+make install
 ```
-
-You need to set `LD_LIBRARY_PATH` for `libpq`:
-```export LD_LIBRARY_PATH=<lib directory of PosgreSQL binaries>:$LD_LIBRARY_PATH```
-
 ## Usage
 
 `chpasswd` for PostgreSQL can be compared to `passwd` on Linux and UNIX systems when used to change current user password.
