@@ -13,7 +13,7 @@ This module can be built using a standard PostgreSQL server installation that in
 - `pg_config` program must be available in $PATH for user running make.
 - user running make needs also sudo privilege in order to be able to install executables in PostgreSQL target directory (output of ```pg_config --bindir```).
 
-### Example on RHEL 9.8
+### RHEL 9.8
 ```
 sudo dnf -y install postgresql17-devel
 export PATH=/usr/pgsql-17/bin:$PATH
@@ -22,6 +22,18 @@ cd pgpasswd
 make clean
 make
 ```
+
+### Debian 13
+
+```
+sudo apt -y install libpq-dev
+export PATH=/usr/lib/postgresql/18/bin/pg_config:$PATH
+git clone https://github.com/pierreforstmann/pgpasswd.git
+cd pgpasswd
+make clean
+make
+```
+
 ### Installing
 ```
 make install
